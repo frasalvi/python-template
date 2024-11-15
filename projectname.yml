@@ -1,0 +1,7 @@
+name: projectname
+channels:
+  - defaults
+dependencies:
+  - python==3.11.9
+  - ipykernel
+prefix: /scratch/salvi/miniconda3/envs/projectname
