@@ -6,6 +6,7 @@ Template repository for new python projects
 1. Initialize new conda environment
 ```
 conda env create -f <projectname>.yml
+conda activate <projectname>
 ```
 
 2. Install required libraries
