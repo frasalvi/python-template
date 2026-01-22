@@ -2,7 +2,7 @@ name: projectname
 channels:
   - defaults
 dependencies:
-  - python==3.11.9
+  - python==3.14
   - ipykernel
   - pre-commit
   - pip:
