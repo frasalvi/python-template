@@ -4,4 +4,7 @@ channels:
 dependencies:
   - python==3.11.9
   - ipykernel
+  - pre-commit
+  - pip:
+      - autorootcwd
 prefix: /scratch/salvi/miniconda3/envs/projectname

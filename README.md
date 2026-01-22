@@ -9,31 +9,15 @@ conda env create -f <projectname>.yml
 conda activate <projectname>
 ```
 
-2. Install required libraries
-
-```
-pip install -r requirements.txt
-```
-
-3. Install pre-commit hooks
+2. Install pre-commit hooks
 
 ```
 pre-commit install
 ```
 
-4. Create a file called `apiKeys.json` file in the `secrets` directory with the following structure:
-```
-{
-    "openai": {
-        "api_key": "<your-key>"
-    },
-    "anthropic": {
-        "api_key": "<your-key>"
-    },
-    ...
-}
-```
+3. Edit the `src/config.py` file to set the correct paths for your project.
 
+4. Create a `.env` file in the root directory of the project based on the `.env.example` file and add your environment variables.
 
 ## Running the code
 

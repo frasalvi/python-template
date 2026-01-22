@@ -16,7 +16,7 @@ repos:
     rev: "6.0.0"
     hooks:
       - id: flake8
-        args: ["--config=setup.cfg", "--ignore=E203,F631"]
+        args: ["--config=setup.cfg", "--ignore=E203,F631,E501"]
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
