@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test-python:
+    name: Test Python Scripts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Python version from environment file
+        id: python-version
+        run: |
+          PYTHON_VERSION=$(grep -oP 'python=\K[0-9.]+' aishopping.yml)
+          echo "version=$PYTHON_VERSION" >> $GITHUB_OUTPUT
+          echo "Detected Python version: $PYTHON_VERSION"
+        shell: bash
+
+      - name: Cache conda environment
+        uses: actions/cache@v4
+        id: conda-cache
+        with:
+          path: /usr/share/miniconda/envs/aishopping
+          key: conda-${{ runner.os }}-${{ hashFiles('aishopping.yml') }}
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: false
+          activate-environment: aishopping
+          auto-activate-base: false
+
+      - name: Create conda environment
+        if: steps.conda-cache.outputs.cache-hit != 'true'
+        run: |
+          conda env update -n aishopping -f aishopping.yml --prune
+
+      - name: Verify conda environment
+        run: |
+          conda info
+          conda list
+
+      - name: Test Python script imports
+        working-directory: ${{ github.workspace }}
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          echo "Testing Python script imports..."
+
+          failed=()
+          succeeded=()
+
+          # Find all Python files in src/, excluding __init__.py and __pycache__
+          while IFS= read -r filepath; do
+            filename=$(basename "$filepath")
+            # Skip __init__.py
+            if [[ "$filename" == __* ]]; then
+              continue
+            fi
+
+            # Convert file path to module name (e.g., src/analysis/main.py -> src.analysis.main)
+            module_name=$(echo "$filepath" | sed 's|/|.|g' | sed 's|\.py$||')
+
+            echo "Importing $module_name..."
+            if python -c "import $module_name" 2>&1; then
+              echo "  ✓ $module_name imported successfully"
+              succeeded+=("$module_name")
+            else
+              echo "  ✗ $module_name failed"
+              failed+=("$module_name")
+            fi
+          done < <(find src -name '*.py' -type f)
+
+          echo ""
+          echo "Results: ${#succeeded[@]} succeeded, ${#failed[@]} failed"
+
+          if [ ${#failed[@]} -gt 0 ]; then
+            echo ""
+            echo "Failed imports:"
+            for name in "${failed[@]}"; do
+              echo "  - $name"
+            done
+            exit 1
+          fi

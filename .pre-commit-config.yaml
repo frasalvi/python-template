@@ -1,33 +1,99 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
-  - repo: https://github.com/myint/autoflake
-    rev: v2.0.0
+
+  ## Python
+  # Ruff: replaces flake8, isort, autoflake, pyupgrade, and more
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.3
     hooks:
-      - id: autoflake
-        args:
-          [--in-place, --remove-all-unused-imports, --remove-unused-variables]
-  - repo: https://github.com/pycqa/flake8
-    rev: "6.0.0"
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.14.1
     hooks:
-      - id: flake8
-        args: ["--config=setup.cfg", "--ignore=E203,F631,E501"]
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
+      - id: mypy
+        args: [--ignore-missing-imports]
+        additional_dependencies:
+          - types-requests
+
+  # Security scanning
+  - repo: https://github.com/PyCQA/bandit
+    rev: "1.8.3"
     hooks:
-      - id: black
-        # It is recommended to specify the latest version of Python
-        # supported by your project here, or alternatively use
-        # pre-commit's default_language_version, see
-        # https://pre-commit.com/#top_level-default_language_version
-        language_version: python3.11
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+      - id: bandit
+        args: [-c, pyproject.toml]
+        additional_dependencies: ["bandit[toml]"]
+
+  ## JavaScript / TypeScript / CSS / HTML
+  # Prettier (auto-format)
+  - repo: https://github.com/JoC0de/pre-commit-prettier
+    rev: v3.6.2
     hooks:
-      - id: isort
-        name: isort (python)
+      - id: prettier
+        additional_dependencies:
+          - "prettier@3.6.2"
+        files: |
+          (?x)^(
+            .+\.([cm]?(j|t)sx?)$|
+            .+\.json$|
+            .+\.md$|
+            .+\.html?$|
+            .+\.css$|
+            .+\.scss$
+          )
+
+  # ESLint (lint + auto-fix; removes unused imports; enforces import order; security rules)
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.36.0
+    hooks:
+      - id: eslint
+        name: eslint (fix)
+        args: [--fix, --no-warn-ignored]
+        files: ^.+\.[cm]?(j|t)sx?$
+        additional_dependencies:
+          # Core
+          - "@eslint/eslintrc@^3"
+          - "@eslint/js@9.36.0"
+          - eslint@9.36.0
+          - eslint-config-prettier@10.1.8
+
+          # TypeScript
+          - "@typescript-eslint/parser@8.44.0"
+          - "@typescript-eslint/eslint-plugin@8.44.0"
+
+          # Imports / ordering / unused
+          - eslint-plugin-import@2.32.0
+          - eslint-import-resolver-typescript@4.4.4
+          - eslint-plugin-unused-imports@4.2.0
+
+          # React stack
+          - eslint-plugin-react@7.37.5
+          - eslint-plugin-react-hooks@5.2.0
+          - eslint-plugin-jsx-a11y@6.10.2
+
+          # Security
+          - eslint-plugin-security@3.0.1
+
+  # Stylelint (lint + auto-fix CSS/SCSS and styled blocks)
+  - repo: https://github.com/thibaudcolas/pre-commit-stylelint
+    rev: v16.24.0
+    hooks:
+      - id: stylelint
+        name: stylelint (fix)
+        args: [--fix]
+        files: (?x)^( .+\.css$|.+\.scss$|.+\.html?$ )
+        additional_dependencies:
+          - stylelint@16.24.0
+          - stylelint-config-standard@39.0.0
+          - stylelint-order@7.0.0
+          - postcss-html@1.8.0 # parse <style> in HTML
+          - postcss-styled-syntax@0.7.1

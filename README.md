@@ -1,24 +1,66 @@
-# python-template
-Template repository for new python projects
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/)
+[![MIT License](https://img.shields.io/github/license/m43/focal-loss-against-heuristics)](LICENSE)
 
-## Getting Started
 
-1. Initialize new conda environment
+# Python Template
+
+A minimal template for Python projects with modern tooling.
+
+## Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone git@github.com:<your-repository>.git
+cd <your-repository>
 ```
-conda env create -f <projectname>.yml
-conda activate <projectname>
+
+### 2. Set Up the Environment
+
+Create and activate the Conda environment:
+
+```bash
+conda env create -f <your-environment-file>.yml
+conda activate <your-environment-name>
 ```
 
-2. Install pre-commit hooks
 
+### 3. Configure Environment Variables
+
+```bash
+cp .env.example .env
 ```
-pre-commit install
+
+Edit `.env` with your configuration.
+
+## Project Structure
+
+```.
+├── src/              # Source code
+│   ├── config.py     # Settings via pydantic-settings
+│   └── __init__.py
+├── data/             # Data files
+├── projectname.yml   # Conda environment
+├── pyproject.toml    # Tool configurations
+└── setup.cfg         # Package metadata
 ```
 
-3. Edit the `src/config.py` file to set the correct paths for your project.
+## License
 
-4. Create a `.env` file in the root directory of the project based on the `.env.example` file and add your environment variables.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Running the code
+## Citation
 
-add your instructions...
+If you use this platform in your research, please cite:
+
+```bibtex
+@misc{your_project_2024,
+  author = {Your Name},
+  title = {Your Project Name: A Python Template for Modern Development},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/your-username/your-repository}},
+}
+```
+

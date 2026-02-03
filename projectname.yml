@@ -7,4 +7,6 @@ dependencies:
   - pre-commit
   - pip:
       - autorootcwd
+      - pydantic
+      - pydantic_settings
 prefix: /scratch/salvi/miniconda3/envs/projectname
