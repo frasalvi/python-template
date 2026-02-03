@@ -1,4 +1,4 @@
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/)
+[![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/downloads/release/python-314/)
 [![MIT License](https://img.shields.io/github/license/m43/focal-loss-against-heuristics)](LICENSE)
 
 

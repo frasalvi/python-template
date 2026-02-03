@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 90
-target-version = "py311"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = [
@@ -32,7 +32,7 @@ exclude_dirs = ["tests"]
 skips = ["B101"]  # skip assert_used (same as S101)
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.14"
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true
