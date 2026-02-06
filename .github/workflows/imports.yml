@@ -21,7 +21,7 @@ jobs:
       - name: Extract Python version from environment file
         id: python-version
         run: |
-          PYTHON_VERSION=$(grep -oP 'python=\K[0-9.]+' aishopping.yml)
+          PYTHON_VERSION=$(grep -oP 'python=\K[0-9.]+' projectname.yml)
           echo "version=$PYTHON_VERSION" >> $GITHUB_OUTPUT
           echo "Detected Python version: $PYTHON_VERSION"
         shell: bash
@@ -30,20 +30,20 @@ jobs:
         uses: actions/cache@v4
         id: conda-cache
         with:
-          path: /usr/share/miniconda/envs/aishopping
-          key: conda-${{ runner.os }}-${{ hashFiles('aishopping.yml') }}
+          path: /usr/share/miniconda/envs/projectname
+          key: conda-${{ runner.os }}-${{ hashFiles('projectname.yml') }}
 
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: false
-          activate-environment: aishopping
+          activate-environment: projectname
           auto-activate-base: false
 
       - name: Create conda environment
         if: steps.conda-cache.outputs.cache-hit != 'true'
         run: |
-          conda env update -n aishopping -f aishopping.yml --prune
+          conda env update -n projectname -f projectname.yml --prune
 
       - name: Verify conda environment
         run: |
